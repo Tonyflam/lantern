@@ -57,3 +57,26 @@ the hardware evidence for the submission.
 | vision     |           |          |       |
 | ocr        | —         | —        | ms/image |
 | tts        | —         | —        | ms/utterance |
+
+## Reference numbers — CPU-only dev container (NOT the target machine)
+
+These are **real** QVAC measurements captured during development on a constrained
+2-core Linux container with **no GPU** (software Vulkan / `llvmpipe`). They prove
+the real-engine path works end-to-end and set a worst-case floor; your laptop or
+Hub will be substantially faster. A captured log of this run is committed at
+[evidence/real-run.qvac.jsonl](evidence/real-run.qvac.jsonl) (every line
+`"engine":"qvac"`).
+
+| Capability | Model | Cold load | Warm op | Throughput |
+| ---------- | ----- | --------- | ------- | ---------- |
+| Embeddings | `GTE_LARGE_FP16` (1024-d) | ~7.5 s | ~185–254 ms / embed | — |
+| LLM chat   | `LLAMA_3_2_1B_INST_Q4_0`  | ~48 s | ttft 1625 ms | 11.5 tok/s |
+
+> Cold load includes the one-time model download into `~/.qvac/models`; warm runs
+> load from cache. Real RAG was verified: a stored note recalled at **91–93 %**
+> cosine similarity via genuine on-device embeddings.
+
+> **Prerequisite reminder (Linux/Windows):** the QVAC native worker needs the
+> Vulkan loader (`libvulkan.so.1`) present even on CPU. `npm run doctor` checks
+> it; install `libvulkan1` (+ `mesa-vulkan-drivers` for a software fallback) if
+> it reports missing.

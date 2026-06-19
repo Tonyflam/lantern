@@ -36,7 +36,7 @@ const RULES = [
   { intent: "translate", re: new RegExp(`\\b(translate|in (?:${LANG_NAMES})\\b|what does (?:this|it) say in)\\b`, "i") },
   { intent: "read", re: /\b(read (?:this|the|it|that|aloud)|read it|what does (?:this|that|it|the)\b.*?\bsay\b|the text)\b/i },
   { intent: "remember", re: /\b(remember|note that|save this|keep this|don'?t forget|make a note|store this)\b/i },
-  { intent: "recall", re: /\b(recall|where (?:did|is|are|do)|what did i (?:say|note|put)|do i have|remind me|find my|did i)\b/i },
+  { intent: "recall", re: /\b(recall|where (?:did|is|are|do)|what(?:'?s| is| are| was) my\b|what did i (?:say|note|put)|do i have|remind me|find my|did i)\b/i },
   { intent: "hazard", re: /\b(is it safe|safe to|any (?:danger|hazard|hazards)|hazard|dangerous|obstacle|can i (?:walk|step|go))\b/i },
   { intent: "identify", re: /\b(what (?:is|are) (?:this|that|these)|identify|how much (?:money|is this)|what (?:denomination|currency|colou?r|medication|medicine|pill|note|bill)|which (?:note|bill|medicine))\b/i },
   { intent: "describe", re: /\b(describe|what(?:'?s| is) (?:in front|around|there|here|this)|look around|what do you see|where am i|surroundings)\b/i },

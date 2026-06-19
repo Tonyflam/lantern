@@ -40,7 +40,10 @@ on-device AI more than any other.
    commands** — read aloud, never obeyed. Enforced in code and covered by tests.
 4. **Privacy you can audit.** A JSONL audit log records timing and throughput for
    every on-device inference but **never** records your photos, audio, or text —
-   only content-free fingerprints. (See [evidence/SCHEMA.md](evidence/SCHEMA.md).)
+   only content-free fingerprints. A committed **real** capture
+   ([evidence/real-run.qvac.jsonl](evidence/real-run.qvac.jsonl), every line
+   `"engine":"qvac"`) proves the on-device path runs, not just a mock. (Schema:
+   [evidence/SCHEMA.md](evidence/SCHEMA.md).)
 5. **Live P2P edge.** A light field device (laptop/Pi) can offload heavy vision
    to a **Lantern Hub** you run at home over QVAC's encrypted peer-to-peer link —
    with automatic **local fallback**. The flagship QVAC differentiator, used for
@@ -50,10 +53,17 @@ on-device AI more than any other.
 
 > Requires **Node ≥ 22.17** and **npm ≥ 10.9**. `ffmpeg` is needed for voice
 > (microphone in / speaker out).
+>
+> **Linux/Windows real-engine prerequisite — the Vulkan loader.** QVAC's native
+> worker links llama.cpp's Vulkan backend and needs `libvulkan.so.1` present
+> **even when running on CPU**; without it the worker aborts with a cryptic RPC
+> timeout. On Debian/Ubuntu: `sudo apt-get install -y libvulkan1`. With no GPU,
+> add `mesa-vulkan-drivers` for a software fallback (`llvmpipe`). macOS uses
+> Metal and needs nothing extra. `npm run doctor` checks this for you.
 
 ```bash
 npm install
-npm run doctor        # check your environment
+npm run doctor        # check your environment (incl. the Vulkan loader)
 npm start             # open http://127.0.0.1:4173
 ```
 
@@ -114,7 +124,7 @@ LANTERN_PROVIDER_PUBLIC_KEY=<the hub's public key>
 | `npm run demo` | Scripted walkthrough; writes a **real** audit log. |
 | `npm run doctor` | Environment & readiness report. |
 | `npm run bench` | Real TTFT / tokens-per-second on your hardware. |
-| `npm test` | Vitest suite (42 tests; deterministic spine + injection invariants). |
+| `npm test` | Vitest suite (44 tests; deterministic spine + injection invariants). |
 | `npm run lint` | ESLint. |
 
 ## How it's built

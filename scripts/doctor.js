@@ -64,6 +64,12 @@ try {
 }
 line(PASS, "GPU hint", gpuHint);
 
+// Vulkan loader — QVAC's native llama.cpp worker links the Vulkan backend and
+// needs libvulkan.so.1 present on Linux EVEN IN CPU MODE. Without it the worker
+// aborts (SIGABRT) and you see a cryptic RPC init timeout. This check turns that
+// hard-to-diagnose failure into a one-line fix.
+checkVulkan();
+
 // Config
 try {
   const cfg = loadConfig();
@@ -115,3 +121,56 @@ function walk(dir) {
   }
   return out;
 }
+
+/**
+ * Verify the Vulkan loader is available. QVAC's native worker requires it on
+ * Linux/Windows even when running on CPU; macOS uses Metal and does not.
+ */
+function checkVulkan() {
+  if (process.platform === "darwin") {
+    line(PASS, "Vulkan loader", "not required on macOS (QVAC uses Metal)");
+    return;
+  }
+
+  // Is the loader library on the system?
+  let loaderFound = false;
+  try {
+    const out = execFileSync("ldconfig", ["-p"], { encoding: "utf8" });
+    loaderFound = /libvulkan\.so\.1/.test(out);
+  } catch {
+    // ldconfig missing (e.g. Windows) — fall back to known file locations.
+    loaderFound = [
+      "/lib/x86_64-linux-gnu/libvulkan.so.1",
+      "/usr/lib/x86_64-linux-gnu/libvulkan.so.1",
+      "/usr/lib/libvulkan.so.1",
+    ].some((p) => existsSync(p));
+  }
+
+  if (!loaderFound) {
+    line(
+      FAIL,
+      "Vulkan loader",
+      "libvulkan.so.1 missing — QVAC's native worker needs it even on CPU. " +
+        "On Debian/Ubuntu: sudo apt-get install -y libvulkan1 mesa-vulkan-drivers",
+    );
+    return;
+  }
+
+  // Loader present — see if any device (hardware or software) is usable.
+  try {
+    const info = execFileSync("vulkaninfo", ["--summary"], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+    const m = info.match(/deviceName\s*=\s*(.+)/);
+    const dev = m ? m[1].trim() : "device detected";
+    const software = /llvmpipe|lavapipe|SwiftShader/i.test(info);
+    line(PASS, "Vulkan loader", `libvulkan.so.1 present — ${dev}${software ? " (software fallback, slower)" : ""}`);
+  } catch {
+    // Loader is there but no enumerable device / vulkan-tools not installed.
+    line(
+      WARN,
+      "Vulkan loader",
+      "libvulkan.so.1 present but no device enumerated. If a real run aborts, install a driver " +
+        "(GPU vendor driver, or mesa-vulkan-drivers for a software fallback).",
+    );
+  }
+}
+

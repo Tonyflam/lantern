@@ -1,0 +1,16 @@
+{"ts":"2026-06-19T04:37:15.388Z","sessionId":"0ee22b03-2de6-4c1c-a698-ccdf4ef7d6b0","engine":"qvac","op":"session_start","ok":true,"meta":{"node":"v24.14.0","platform":"linux","arch":"x64"}}
+{"ts":"2026-06-19T04:37:16.603Z","sessionId":"0ee22b03-2de6-4c1c-a698-ccdf4ef7d6b0","engine":"qvac","op":"engine_init","ok":true,"meta":{"device":"cpu"}}
+{"ts":"2026-06-19T04:37:21.985Z","sessionId":"0ee22b03-2de6-4c1c-a698-ccdf4ef7d6b0","engine":"qvac","op":"model_download","capability":"embeddings","model":"GTE_LARGE_FP16","ok":true,"meta":{"percentage":100}}
+{"ts":"2026-06-19T04:37:24.152Z","sessionId":"0ee22b03-2de6-4c1c-a698-ccdf4ef7d6b0","engine":"qvac","op":"model_load","capability":"embeddings","model":"GTE_LARGE_FP16","device":"cpu","delegated":false,"durationMs":7547,"ok":true}
+{"ts":"2026-06-19T04:37:24.407Z","sessionId":"0ee22b03-2de6-4c1c-a698-ccdf4ef7d6b0","engine":"qvac","op":"embed","capability":"embeddings","model":"GTE_LARGE_FP16","device":"cpu","durationMs":254,"meta":{"dim":1024},"ok":true}
+{"ts":"2026-06-19T04:37:24.408Z","sessionId":"0ee22b03-2de6-4c1c-a698-ccdf4ef7d6b0","engine":"qvac","op":"skill","skill":"remember","intent":"remember","confidence":"high","durationMs":7803,"ok":true,"meta":{"verified":true,"hasImage":false,"warned":false}}
+{"ts":"2026-06-19T04:37:24.443Z","sessionId":"0ee22b03-2de6-4c1c-a698-ccdf4ef7d6b0","engine":"qvac","op":"model_unload","capability":"embeddings","model":"GTE_LARGE_FP16","ok":true}
+{"ts":"2026-06-19T04:37:24.443Z","sessionId":"0ee22b03-2de6-4c1c-a698-ccdf4ef7d6b0","engine":"qvac","op":"session_end","ok":true}
+{"ts":"2026-06-19T04:37:24.604Z","sessionId":"4e9e69b5-fb37-489c-b759-5f3963324ecd","engine":"qvac","op":"session_start","ok":true,"meta":{"node":"v24.14.0","platform":"linux","arch":"x64"}}
+{"ts":"2026-06-19T04:37:25.675Z","sessionId":"4e9e69b5-fb37-489c-b759-5f3963324ecd","engine":"qvac","op":"engine_init","ok":true,"meta":{"device":"cpu"}}
+{"ts":"2026-06-19T04:37:29.370Z","sessionId":"4e9e69b5-fb37-489c-b759-5f3963324ecd","engine":"qvac","op":"model_download","capability":"embeddings","model":"GTE_LARGE_FP16","ok":true,"meta":{"percentage":100}}
+{"ts":"2026-06-19T04:37:29.714Z","sessionId":"4e9e69b5-fb37-489c-b759-5f3963324ecd","engine":"qvac","op":"model_load","capability":"embeddings","model":"GTE_LARGE_FP16","device":"cpu","delegated":false,"durationMs":4037,"ok":true}
+{"ts":"2026-06-19T04:37:29.899Z","sessionId":"4e9e69b5-fb37-489c-b759-5f3963324ecd","engine":"qvac","op":"embed","capability":"embeddings","model":"GTE_LARGE_FP16","device":"cpu","durationMs":185,"meta":{"dim":1024},"ok":true}
+{"ts":"2026-06-19T04:37:29.903Z","sessionId":"4e9e69b5-fb37-489c-b759-5f3963324ecd","engine":"qvac","op":"skill","skill":"recall","intent":"recall","confidence":"high","durationMs":4227,"ok":true,"meta":{"verified":true,"hasImage":false,"warned":false}}
+{"ts":"2026-06-19T04:37:29.936Z","sessionId":"4e9e69b5-fb37-489c-b759-5f3963324ecd","engine":"qvac","op":"model_unload","capability":"embeddings","model":"GTE_LARGE_FP16","ok":true}
+{"ts":"2026-06-19T04:37:29.937Z","sessionId":"4e9e69b5-fb37-489c-b759-5f3963324ecd","engine":"qvac","op":"session_end","ok":true}

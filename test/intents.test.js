@@ -13,6 +13,8 @@ describe("intents — deterministic classifier", () => {
     ["is it safe ahead", "hazard"],
     ["remember I parked in B12", "remember"],
     ["where did I park", "recall"],
+    ["what is my front door code", "recall"],
+    ["what's my wifi password", "recall"],
     ["translate this to spanish", "translate"],
   ];
 

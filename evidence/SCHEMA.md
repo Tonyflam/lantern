@@ -67,3 +67,15 @@ correlate a run, never enough to reconstruct the content.
 > A real, freshly-generated log is the authoritative evidence. The file
 > `sample-run.example.jsonl` in this folder is an **illustrative** excerpt
 > (clearly tagged `"engine":"mock"`); regenerate your own with `npm run demo`.
+
+## Committed real-engine capture
+
+`real-run.qvac.jsonl` in this folder is a **genuine** capture from the real QVAC
+engine (every line `"engine":"qvac"`), recorded on a CPU-only Linux container
+with software Vulkan (`llvmpipe`). It shows a full remember → recall flow:
+`model_download` → `model_load` → `embed` → `skill` → `model_unload` for
+`GTE_LARGE_FP16`, with the note recalled at **91 %** cosine similarity. It
+contains **no** user content — only content-free fingerprints, timing, and model
+metadata — and demonstrates that the on-device path runs for real, not just the
+mock. (See [../HARDWARE.md](../HARDWARE.md) for the measured numbers, including
+the `LLAMA_3_2_1B_INST_Q4_0` chat run at ttft 1625 ms / 11.5 tok/s.)
