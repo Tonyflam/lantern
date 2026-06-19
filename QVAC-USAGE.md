@@ -82,14 +82,18 @@ for await (const tok of r.tokenStream) { /* stream */ }
 
 ### Embeddings
 ```js
-const modelId = await loadModel({ modelSrc: GTE_LARGE_FP16, modelConfig: {} });
+const modelId = await loadModel({ modelSrc: GTE_LARGE_FP16,
+  modelConfig: { device, gpuLayers: 99 } }); // gpuLayers only when device is gpu
 const { embedding } = await embed({ modelId, text }); // 1024-dim
 ```
 
 ### P2P (Lantern Hub)
 ```js
 // Provider (your home machine) — src/p2p/hub.js
-const { publicKey } = await startQVACProvider({ firewall: { mode: "allow", publicKeys } });
+// NOTE: an "allow" firewall with an EMPTY list rejects every peer, so omit the
+// firewall entirely to accept any peer that knows the key, or pass an allow-list.
+const { publicKey } = await startQVACProvider(
+  allow.length ? { firewall: { mode: "allow", publicKeys: allow } } : {});
 
 // Consumer (field device) — delegate only the heavy vision model
 await loadModel({ modelSrc: SMOLVLM2_500M_MULTIMODAL_Q8_0, modelConfig: {...},
