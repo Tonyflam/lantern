@@ -31,3 +31,48 @@ describe("vector math", () => {
     expect(res[0].score).toBeGreaterThanOrEqual(res[1].score);
   });
 });
+
+describe("vector math — properties and edge cases", () => {
+  it("cosineSim is symmetric", () => {
+    const a = [0.2, 0.8, -0.3];
+    const b = [0.5, -0.1, 0.9];
+    expect(cosineSim(a, b)).toBeCloseTo(cosineSim(b, a), 12);
+  });
+
+  it("cosineSim is invariant to positive scaling", () => {
+    const a = [1, 2, 3];
+    expect(cosineSim(a, a.map((x) => x * 7))).toBeCloseTo(1, 12);
+  });
+
+  it("dot uses the shorter length when vectors mismatch", () => {
+    expect(dot([1, 2, 3], [4, 5])).toBe(1 * 4 + 2 * 5);
+  });
+
+  it("topK returns everything (sorted) when k exceeds the item count", () => {
+    const items = [
+      { id: "a", embedding: [1, 0] },
+      { id: "b", embedding: [0, 1] },
+    ];
+    const res = topK([1, 0], items, 10);
+    expect(res).toHaveLength(2);
+    expect(res[0].item.id).toBe("a");
+  });
+
+  it("topK excludes negatively-similar items at the default threshold", () => {
+    const items = [
+      { id: "same", embedding: [1, 0] },
+      { id: "opposite", embedding: [-1, 0] },
+    ];
+    const res = topK([1, 0], items, 5);
+    expect(res.map((r) => r.item.id)).toEqual(["same"]);
+  });
+
+  it("topK with an impossible threshold returns nothing", () => {
+    const items = [{ id: "a", embedding: [1, 0] }];
+    expect(topK([1, 0], items, 5, 1.1)).toHaveLength(0);
+  });
+
+  it("topK on an empty corpus returns nothing", () => {
+    expect(topK([1, 0], [], 5)).toHaveLength(0);
+  });
+});

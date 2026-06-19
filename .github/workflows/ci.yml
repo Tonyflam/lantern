@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Lantern is fully on-device. CI proves the repo stays that way: it lints,
+# runs the static no-egress audit (bans cloud-AI SDKs, asserts loopback +
+# local P2P fallback), and runs the full test suite — no models required.
+jobs:
+  verify:
+    name: lint · offline-audit · tests (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22.17', '24']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Offline / no-egress audit
+        run: npm run verify:offline
+
+      - name: Tests
+        run: npm test
+
+      - name: Security audit (advisory)
+        run: npm audit --omit=dev || true

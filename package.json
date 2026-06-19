@@ -20,9 +20,11 @@
     "demo": "node scripts/demo.js",
     "doctor": "node scripts/doctor.js",
     "bench": "node scripts/bench.js",
+    "verify:offline": "node scripts/verify-offline.js",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "check": "npm run lint && npm run verify:offline && npm test"
   },
   "optionalDependencies": {
     "@qvac/sdk": "^0.13.2"

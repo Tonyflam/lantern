@@ -2,6 +2,11 @@
 
 ### Your eyes, on your device. The camera never leaves your hand.
 
+[![CI](https://github.com/Tonyflam/qvak/actions/workflows/ci.yml/badge.svg)](https://github.com/Tonyflam/qvak/actions/workflows/ci.yml)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![On-device](https://img.shields.io/badge/AI-100%25_on--device-green.svg)](remote-apis.json)
+[![No build step](https://img.shields.io/badge/build-none_(plain_ESM)-success.svg)](#how-its-built)
+
 **Lantern** is a private, fully **on-device** sight & voice assistant for blind
 and low-vision people, built entirely on **[Tether QVAC](https://qvac.tether.io)**
 edge-AI. Point your camera and ask — Lantern describes scenes, reads text and
@@ -10,6 +15,43 @@ things for you, and talks back. **No cloud. No account. Nothing leaves your
 device** unless you explicitly delegate to a second machine *you* own.
 
 > Built for the **QVAC Hackathon — Unleash Edge AI** (General Purpose track).
+
+---
+
+## For judges — verify in 60 seconds
+
+```bash
+npm install
+npm run check     # ESLint + 42 no-egress checks + 158 tests, one command
+npm run demo      # LANTERN_ENGINE=mock works on ANY machine, no model download
+```
+
+- **No cloud, provably.** `npm run verify:offline` statically scans every source
+  file and `package.json`, fails the build if any cloud-AI SDK (OpenAI, Anthropic,
+  Gemini, Cohere, Pinecone, LangChain, `axios`/`node-fetch`, analytics…) is
+  imported, and asserts the server is loopback-only with local P2P fallback.
+  Declared in [remote-apis.json](remote-apis.json); enforced in
+  [scripts/offline-scan.js](scripts/offline-scan.js).
+- **Real on-device proof, not a mock.** [evidence/real-run.qvac.jsonl](evidence/real-run.qvac.jsonl)
+  is a committed capture where every line is `"engine":"qvac"`. The mock engine is
+  always clearly labelled and can never be mistaken for it.
+- **Where to look first:** the deterministic safety spine in
+  [src/core/safety.js](src/core/safety.js), the injection guard in
+  [src/core/injection-guard.js](src/core/injection-guard.js), and their tests
+  ([test/safety.test.js](test/safety.test.js),
+  [test/injection-guard.test.js](test/injection-guard.test.js)).
+
+| Judging criterion | Where Lantern delivers |
+| ----------------- | ---------------------- |
+| Edge-AI / on-device | 100% `@qvac/sdk`; enforced no-egress audit ([scripts/offline-scan.js](scripts/offline-scan.js)). |
+| Originality | Accessibility — **white space** across the field; the use-case that needs on-device AI most. |
+| Technical depth | Full 8-capability QVAC stack + deterministic safety spine + P2P delegation + on-device RAG. |
+| Real-world impact | A daily-use assistant for 250M+ blind & low-vision people. |
+| Trust / honesty | `✓ verified` vs `AI estimate` badges; content-free audit log; injection resistance; labelled mock. |
+| Reproducibility | No build step; `npm run check`; 0 `npm audit` vulnerabilities. |
+
+See **[Honest limitations](#honest-limitations)** below — we say plainly what is
+and isn't done.
 
 ---
 
@@ -124,7 +166,9 @@ LANTERN_PROVIDER_PUBLIC_KEY=<the hub's public key>
 | `npm run demo` | Scripted walkthrough; writes a **real** audit log. |
 | `npm run doctor` | Environment & readiness report. |
 | `npm run bench` | Real TTFT / tokens-per-second on your hardware. |
-| `npm test` | Vitest suite (45 tests; deterministic spine + injection invariants). |
+| `npm test` | Vitest suite (158 tests; deterministic spine + injection invariants). |
+| `npm run verify:offline` | Static no-egress audit (42 checks; bans cloud-AI SDKs, proves loopback + local P2P fallback). |
+| `npm run check` | Everything: lint + offline audit + tests (the one command judges should run). |
 | `npm run lint` | ESLint. |
 
 ## How it's built
@@ -160,6 +204,30 @@ hands-free by **voice**.
 - The audit log never stores user content.
 - Captured photos/audio are written to a temp file only for the duration of one
   request, then deleted.
+
+## Honest limitations
+
+We build a tool blind people might rely on, so we are precise about what it does
+**not** do:
+
+- **Lantern is an aid, not a certified safety device.** Hazard detection and the
+  scene description help with awareness; they are **not** a substitute for a cane,
+  a guide dog, or sighted assistance. The UI says so, and high-stakes answers
+  carry a disclaimer.
+- **Currency and medication reads are deterministic but best-effort.** They are
+  decided by transparent rules over OCR text (so they never *hallucinate* a
+  value), but OCR can still misread a worn note or a glare-covered label. Lantern
+  shows what it read and asks the user to confirm anything that matters — it will
+  not pretend to be a counterfeit detector or a pharmacist.
+- **Vision quality is the model's.** Scene descriptions are an `AI estimate` and
+  are labelled as such; only the rule-checked facts get a `✓ verified` badge.
+- **Real inference needs the QVAC models and the Vulkan loader** (see Quickstart).
+  Where those aren't present, the clearly-labelled **mock engine** lets anyone run
+  the full app and test-suite — it is a simulation, never real output.
+- **P2P offload requires a second machine you own.** Without a Lantern Hub,
+  everything runs locally on the one device (which is the default).
+- **Languages.** Translation covers the languages the bundled QVAC translation
+  model supports; OCR is tuned for Latin-script text today.
 
 ## License
 
