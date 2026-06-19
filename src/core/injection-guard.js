@@ -42,7 +42,12 @@ const FENCE_CLOSE = "<<<UNTRUSTED_CONTENT_END>>>";
 export function scanForInjection(text) {
   /** @type {string[]} */
   const hits = [];
-  const str = String(text || "");
+  // World-captured OCR/scene text routinely arrives with line breaks and
+  // irregular spacing mid-phrase — a sign photographed as "ignore all previous\n
+  // instructions" must still be caught. Collapse runs of whitespace to single
+  // spaces so manipulation patterns match regardless of how the camera or OCR
+  // wrapped the words. (Detection only — the user's content is never mutated.)
+  const str = String(text || "").replace(/\s+/g, " ");
   for (const re of INJECTION_PATTERNS) {
     const m = str.match(re);
     if (m) hits.push(m[0]);
