@@ -1,0 +1,73 @@
+{
+  "$schema": "./lantern.config.schema.json",
+  "appName": "Lantern",
+  "engine": "qvac",
+  "device": "gpu",
+  "server": {
+    "host": "127.0.0.1",
+    "port": 4173
+  },
+  "voice": {
+    "enabled": true,
+    "ttsVoice": "F1",
+    "ttsSpeed": 1.05,
+    "ttsNumInferenceSteps": 5,
+    "language": "en"
+  },
+  "models": {
+    "llm": {
+      "src": "LLAMA_3_2_1B_INST_Q4_0",
+      "ctx_size": 4096,
+      "note": "Small instruction model: intent routing + phrasing of verified facts. Swap for QWEN3_1_7B_INST_Q4 for stronger tool-calling."
+    },
+    "vision": {
+      "src": "SMOLVLM2_500M_MULTIMODAL_Q8_0",
+      "projection": "MMPROJ_SMOLVLM2_500M_MULTIMODAL_Q8_0",
+      "ctx_size": 1024,
+      "note": "Multimodal scene description. On a Lantern Hub you can delegate to a larger Qwen3-VL pair."
+    },
+    "ocr": {
+      "src": "OCR_LATIN_RECOGNIZER_1",
+      "langList": ["en"],
+      "note": "Deterministic text extraction — the trustworthy spine for reading mail, labels, signs."
+    },
+    "stt": {
+      "src": "WHISPER_TINY",
+      "vad": "VAD_SILERO_5_1_2",
+      "note": "Hands-free voice input. Upgrade to WHISPER_BASE_Q8_0 / WHISPER_SMALL_Q8_0 for accuracy."
+    },
+    "tts": {
+      "src": "TTS_EN_SUPERTONIC_Q8_0",
+      "engine": "supertonic",
+      "sampleRate": 44100,
+      "note": "Spoken output. Lantern speaks every result aloud."
+    },
+    "embeddings": {
+      "src": "GTE_LARGE_FP16",
+      "dim": 1024,
+      "note": "Personal-memory embeddings for private, on-device recall (RAG)."
+    },
+    "translate": {
+      "src": "BERGAMOT_EN_ES",
+      "engine": "Bergamot",
+      "from": "en",
+      "to": "es",
+      "note": "Reads foreign signs/menus back in the user's language. Swap the Bergamot pair for other languages."
+    }
+  },
+  "p2p": {
+    "delegateVision": false,
+    "providerPublicKey": "",
+    "timeoutMs": 60000,
+    "fallbackToLocal": true
+  },
+  "memory": {
+    "store": "src/data/memory-store.json",
+    "topK": 4,
+    "minScore": 0.25
+  },
+  "logging": {
+    "dir": "logs",
+    "console": true
+  }
+}

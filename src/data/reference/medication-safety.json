@@ -1,0 +1,39 @@
+{
+  "_comment": "Deterministic helpers for reading medication labels safely. Lantern extracts dosage/frequency patterns with regex (not model guesses) and ALWAYS appends the safety disclaimer. This powers the optional MedPsy / health-label feature and ties into the Psy track.",
+  "disclaimer": "Lantern can read what is printed on a label, but it is not a medical device and can make mistakes. Always confirm the medicine name, dose, and instructions with a pharmacist or doctor before taking anything.",
+  "highAlert": [
+    "warfarin",
+    "insulin",
+    "methotrexate",
+    "digoxin",
+    "heparin",
+    "lithium",
+    "morphine",
+    "fentanyl",
+    "oxycodone",
+    "chemotherapy"
+  ],
+  "highAlertAdvice": "This appears to be a high-alert medication where small mistakes can be serious. Please double-check the name and dose with a pharmacist.",
+  "dosagePatterns": [
+    "\\b\\d+(?:\\.\\d+)?\\s?mg\\b",
+    "\\b\\d+(?:\\.\\d+)?\\s?mcg\\b",
+    "\\b\\d+(?:\\.\\d+)?\\s?ml\\b",
+    "\\b\\d+(?:\\.\\d+)?\\s?g\\b",
+    "\\b\\d+\\s?units?\\b",
+    "\\b\\d+\\s?(?:tablet|tablets|capsule|capsules|pill|pills)\\b"
+  ],
+  "frequencyPatterns": [
+    "once (?:a day|daily)",
+    "twice (?:a day|daily)",
+    "three times (?:a day|daily)",
+    "four times (?:a day|daily)",
+    "every \\d+ hours?",
+    "at bedtime",
+    "in the morning",
+    "with food",
+    "before food",
+    "after food",
+    "as needed",
+    "when required"
+  ]
+}

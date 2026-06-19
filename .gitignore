@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Environment / secrets
+.env
+.env.local
+
+# Real audit logs generated on each run (regenerate with `npm run demo`)
+logs/
+
+# Model cache (downloaded on first run, multi-GB, never committed)
+models/
+.qvac/
+
+# Generated evidence from real runs (the committed examples under evidence/ are kept)
+evidence/runs/
+
+# Personal memory store created at runtime (private to the user/device)
+src/data/memory-store.json
+data/memory-store.json
+
+# Private sample media — keep sidecar .txt fixtures and the README, ignore real photos
+src/data/samples/*
+!src/data/samples/README.md
+!src/data/samples/*.txt
+
+# Test / tooling output
+coverage/
+*.log
+tmp/
+.DS_Store

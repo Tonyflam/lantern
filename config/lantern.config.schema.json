@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://lantern.local/lantern.config.schema.json",
+  "title": "Lantern configuration",
+  "type": "object",
+  "required": ["engine", "device", "server", "models"],
+  "additionalProperties": true,
+  "properties": {
+    "$schema": { "type": "string" },
+    "appName": { "type": "string" },
+    "engine": {
+      "type": "string",
+      "enum": ["qvac", "mock"],
+      "description": "qvac = real on-device inference; mock = offline simulation."
+    },
+    "device": {
+      "type": "string",
+      "enum": ["gpu", "cpu"],
+      "description": "Preferred compute device. Use cpu on machines without a supported GPU."
+    },
+    "server": {
+      "type": "object",
+      "required": ["host", "port"],
+      "properties": {
+        "host": { "type": "string", "description": "Bind address; keep 127.0.0.1 for loopback-only." },
+        "port": { "type": "integer", "minimum": 1, "maximum": 65535 }
+      },
+      "additionalProperties": false
+    },
+    "voice": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "ttsVoice": { "type": "string" },
+        "ttsSpeed": { "type": "number", "minimum": 0.5, "maximum": 2 },
+        "ttsNumInferenceSteps": { "type": "integer", "minimum": 1 },
+        "language": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "models": {
+      "type": "object",
+      "required": ["llm", "vision", "ocr", "stt", "tts", "embeddings", "translate"],
+      "properties": {
+        "llm": { "$ref": "#/$defs/model" },
+        "vision": {
+          "allOf": [{ "$ref": "#/$defs/model" }],
+          "required": ["src", "projection"],
+          "properties": { "projection": { "type": "string" } }
+        },
+        "ocr": { "$ref": "#/$defs/model" },
+        "stt": { "$ref": "#/$defs/model" },
+        "tts": { "$ref": "#/$defs/model" },
+        "embeddings": { "$ref": "#/$defs/model" },
+        "translate": {
+          "allOf": [{ "$ref": "#/$defs/model" }],
+          "properties": {
+            "engine": { "type": "string" },
+            "from": { "type": "string" },
+            "to": { "type": "string" }
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "p2p": {
+      "type": "object",
+      "properties": {
+        "delegateVision": { "type": "boolean" },
+        "providerPublicKey": { "type": "string" },
+        "timeoutMs": { "type": "integer", "minimum": 1000 },
+        "fallbackToLocal": { "type": "boolean" },
+        "allow": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "memory": {
+      "type": "object",
+      "properties": {
+        "store": { "type": "string" },
+        "topK": { "type": "integer", "minimum": 1 },
+        "minScore": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "logging": {
+      "type": "object",
+      "properties": {
+        "dir": { "type": "string" },
+        "console": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "model": {
+      "type": "object",
+      "required": ["src"],
+      "properties": {
+        "src": { "type": "string", "description": "QVAC model constant name, or a local path / URL." },
+        "ctx_size": { "type": "integer", "minimum": 1 },
+        "langList": { "type": "array", "items": { "type": "string" } },
+        "vad": { "type": "string" },
+        "engine": { "type": "string" },
+        "sampleRate": { "type": "integer" },
+        "dim": { "type": "integer" },
+        "note": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

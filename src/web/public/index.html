@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <title>Lantern — on-device sight &amp; voice assistant</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to controls</a>
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo" aria-hidden="true">🏮</span>
+        <div>
+          <h1>Lantern</h1>
+          <p class="tagline">Your eyes, on your device. The camera never leaves your hand.</p>
+        </div>
+      </div>
+      <div id="status" class="status" role="status" aria-live="polite">Connecting…</div>
+    </header>
+
+    <div id="sim-banner" class="sim-banner" hidden role="alert">
+      ⚠ SIMULATION MODE — running the offline mock engine. Output is illustrative, not real AI.
+      Set <code>LANTERN_ENGINE=qvac</code> on supported hardware for real on-device inference.
+    </div>
+
+    <main id="main">
+      <section class="camera-card" aria-label="Camera">
+        <div class="video-wrap">
+          <video id="video" playsinline muted aria-label="Live camera preview"></video>
+          <p id="cam-placeholder" class="cam-placeholder">Camera is off</p>
+        </div>
+        <canvas id="canvas" hidden></canvas>
+        <div class="camera-controls">
+          <button id="start-cam" class="btn" type="button">Start camera</button>
+          <button id="flip-cam" class="btn btn-secondary" type="button" hidden>Flip camera</button>
+        </div>
+      </section>
+
+      <section class="actions" aria-label="Quick actions">
+        <button class="action" type="button" data-text="describe what is in front of me" data-image="1">
+          <span class="action-icon" aria-hidden="true">👁</span> Describe scene
+        </button>
+        <button class="action" type="button" data-text="read this" data-image="1">
+          <span class="action-icon" aria-hidden="true">📖</span> Read text
+        </button>
+        <button class="action" type="button" data-text="what is this" data-image="1">
+          <span class="action-icon" aria-hidden="true">🔎</span> Identify
+        </button>
+        <button class="action" type="button" data-text="is it safe ahead" data-image="1">
+          <span class="action-icon" aria-hidden="true">⚠</span> Check hazards
+        </button>
+      </section>
+
+      <section class="ptt" aria-label="Voice">
+        <button id="talk" class="talk" type="button" aria-describedby="talk-hint">
+          🎙 Hold to talk
+        </button>
+        <p id="talk-hint" class="hint">
+          Hold the button (or hold Space), speak, then release. Lantern uses the current camera view when relevant.
+        </p>
+      </section>
+
+      <form id="text-form" class="text-row" aria-label="Type a request">
+        <label for="text-input" class="sr-only">Type a request</label>
+        <input
+          id="text-input"
+          type="text"
+          placeholder="Type a request, e.g. remember I parked in B12"
+          autocomplete="off"
+        />
+        <button type="submit" class="btn">Send</button>
+      </form>
+
+      <section class="result-card" aria-label="Result">
+        <div id="result" class="result" role="status" aria-live="assertive" aria-atomic="true">
+          Ready when you are.
+        </div>
+        <div id="badges" class="badges"></div>
+        <details id="detail-wrap" hidden>
+          <summary>Details</summary>
+          <pre id="detail" class="detail"></pre>
+        </details>
+        <audio id="player" hidden></audio>
+      </section>
+
+      <section class="activity-card">
+        <details>
+          <summary>On-device activity (privacy-safe log)</summary>
+          <p class="hint">
+            Lantern records timing only — never your photos, words, or read text.
+          </p>
+          <ul id="activity" class="activity" aria-live="off"></ul>
+        </details>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <p>All AI runs on-device via Tether QVAC. Open source, Apache-2.0.</p>
+    </footer>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

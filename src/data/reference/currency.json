@@ -1,0 +1,45 @@
+{
+  "_comment": "Reference facts for deterministic currency identification. Lantern OCRs the denomination number printed on a note and validates it against this table, rather than trusting a model's guess. Colour/figure hints help cross-check. Best-effort, clearly disclaimed.",
+  "disclaimer": "Currency reading is best-effort. For anything important, please confirm the amount with a trusted person or a dedicated money-reader.",
+  "currencies": {
+    "USD": {
+      "name": "US Dollar",
+      "symbol": "$",
+      "denominations": [1, 2, 5, 10, 20, 50, 100],
+      "notes": {
+        "1": { "color": "green", "figure": "Washington" },
+        "2": { "color": "green", "figure": "Jefferson" },
+        "5": { "color": "green and purple", "figure": "Lincoln" },
+        "10": { "color": "green and orange", "figure": "Hamilton" },
+        "20": { "color": "green", "figure": "Jackson" },
+        "50": { "color": "green and pink", "figure": "Grant" },
+        "100": { "color": "green and teal", "figure": "Franklin" }
+      }
+    },
+    "EUR": {
+      "name": "Euro",
+      "symbol": "€",
+      "denominations": [5, 10, 20, 50, 100, 200, 500],
+      "notes": {
+        "5": { "color": "grey", "figure": "Classical architecture" },
+        "10": { "color": "red", "figure": "Romanesque architecture" },
+        "20": { "color": "blue", "figure": "Gothic architecture" },
+        "50": { "color": "orange", "figure": "Renaissance architecture" },
+        "100": { "color": "green", "figure": "Baroque architecture" },
+        "200": { "color": "yellow-brown", "figure": "Iron and glass architecture" },
+        "500": { "color": "purple", "figure": "Modern architecture" }
+      }
+    },
+    "GBP": {
+      "name": "Pound Sterling",
+      "symbol": "£",
+      "denominations": [5, 10, 20, 50],
+      "notes": {
+        "5": { "color": "turquoise", "figure": "Churchill" },
+        "10": { "color": "orange", "figure": "Austen" },
+        "20": { "color": "purple", "figure": "Turner" },
+        "50": { "color": "red", "figure": "Turing" }
+      }
+    }
+  }
+}

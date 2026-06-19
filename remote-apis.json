@@ -1,0 +1,35 @@
+{
+  "$comment": "Honest disclosure of all network/AI usage in Lantern, for the QVAC 'Unleash Edge AI' judging. Short answer: NO cloud AI. Every inference runs on-device via @qvac/sdk.",
+  "project": "Lantern",
+  "aiInference": {
+    "provider": "Tether QVAC (@qvac/sdk)",
+    "location": "on-device",
+    "cloudAiUsed": false,
+    "thirdPartyAiApisUsed": [],
+    "notes": "All language, vision, OCR, speech-to-text, text-to-speech, translation, and embedding inference runs locally through @qvac/sdk. There are no calls to OpenAI, Anthropic, Google, or any hosted model API."
+  },
+  "network": {
+    "modelDownload": {
+      "what": "First-run download of QVAC model weights",
+      "host": "QVAC model registry / CDN (configured by @qvac/sdk)",
+      "when": "Once per model; cached under ~/.qvac/models and reused fully offline thereafter",
+      "containsUserData": false
+    },
+    "p2pDelegation": {
+      "what": "Optional offload of the heavy vision model to a peer YOU control (the 'Lantern Hub')",
+      "transport": "QVAC encrypted hyperswarm (peer-to-peer)",
+      "thirdParty": false,
+      "default": "disabled (p2p.delegateVision=false). When enabled, inference goes only to your own hub, never a third-party server, and always falls back to local.",
+      "containsUserData": "Only the specific image being described, sent encrypted to your own device; never to a third party."
+    },
+    "telemetry": "none",
+    "analytics": "none",
+    "outboundUserContent": "none by default; the audit log never records photos, audio, or recognized text (content-free fingerprints only)."
+  },
+  "runtimeServer": {
+    "what": "Local web UI",
+    "bind": "127.0.0.1 (loopback only) by default",
+    "exposed": false
+  },
+  "summary": "Lantern is edge-AI by construction: the camera never leaves the user's hand, and no AI runs in the cloud."
+}

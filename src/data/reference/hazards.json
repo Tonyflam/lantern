@@ -1,0 +1,53 @@
+{
+  "_comment": "Deterministic hazard rules. Lantern scans scene/description text for these keywords and surfaces transparent, rule-based safety warnings. This is code, not model judgement — so it is predictable and cannot be hijacked by text inside an image.",
+  "rules": [
+    {
+      "type": "fire",
+      "severity": "high",
+      "keywords": ["stove", "flame", "fire", "burner", "gas hob", "smoke", "candle", "lit match", "open flame"],
+      "advice": "Possible fire or heat source. Keep your distance and check whether it is switched off."
+    },
+    {
+      "type": "sharp",
+      "severity": "medium",
+      "keywords": ["knife", "blade", "scissors", "broken glass", "razor", "shard"],
+      "advice": "A sharp object may be nearby. Reach slowly and handle with care."
+    },
+    {
+      "type": "fall",
+      "severity": "high",
+      "keywords": ["stairs", "staircase", "steps", "ledge", "edge of", "cliff", "drop off", "open hole", "gap in the floor"],
+      "advice": "Possible steps or a drop ahead. Move slowly and feel for the edge before stepping."
+    },
+    {
+      "type": "wet",
+      "severity": "medium",
+      "keywords": ["wet floor", "spill", "puddle", "slippery", "water on the floor", "mopped"],
+      "advice": "The floor may be wet and slippery."
+    },
+    {
+      "type": "hot",
+      "severity": "medium",
+      "keywords": ["boiling", "steam", "kettle", "hot pan", "hot plate", "iron is on", "radiator"],
+      "advice": "Something may be hot. Avoid touching surfaces directly until you have checked."
+    },
+    {
+      "type": "traffic",
+      "severity": "high",
+      "keywords": ["road", "traffic", "moving car", "vehicle", "crossing", "busy street", "bicycle lane", "railway", "platform edge"],
+      "advice": "Possible traffic or a platform edge nearby. Do not step forward until you are certain it is safe."
+    },
+    {
+      "type": "obstacle",
+      "severity": "low",
+      "keywords": ["cable on the floor", "loose cord", "clutter", "box on the floor", "obstacle", "toy on the floor", "low table"],
+      "advice": "There may be an obstacle on the floor in your path."
+    },
+    {
+      "type": "electrical",
+      "severity": "medium",
+      "keywords": ["exposed wire", "live wire", "frayed cable", "open socket", "sparking"],
+      "advice": "Possible electrical hazard. Avoid contact and ask for assistance."
+    }
+  ]
+}
