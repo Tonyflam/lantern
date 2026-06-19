@@ -62,7 +62,7 @@ Record at 1080p, narrate clearly, keep under 5:00.
 ## 4. Pre-submit checklist
 
 - [ ] `npm install` succeeds on a clean clone.
-- [ ] `npm test` → **44 passing**.
+- [ ] `npm test` → **45 passing**.
 - [ ] `npm run lint` → clean.
 - [ ] `npm audit` → **0 vulnerabilities**.
 - [ ] `npm run doctor` → green on your machine.

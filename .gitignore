@@ -19,10 +19,12 @@ evidence/runs/
 src/data/memory-store.json
 data/memory-store.json
 
-# Private sample media — keep sidecar .txt fixtures and the README, ignore real photos
+# Private sample media — keep sidecar .txt fixtures, the README, and the
+# committed synthetic demo cards (sample-*.png); ignore any real private photos.
 src/data/samples/*
 !src/data/samples/README.md
 !src/data/samples/*.txt
+!src/data/samples/sample-*.png
 
 # Test / tooling output
 coverage/

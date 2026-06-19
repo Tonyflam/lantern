@@ -124,7 +124,7 @@ LANTERN_PROVIDER_PUBLIC_KEY=<the hub's public key>
 | `npm run demo` | Scripted walkthrough; writes a **real** audit log. |
 | `npm run doctor` | Environment & readiness report. |
 | `npm run bench` | Real TTFT / tokens-per-second on your hardware. |
-| `npm test` | Vitest suite (44 tests; deterministic spine + injection invariants). |
+| `npm test` | Vitest suite (45 tests; deterministic spine + injection invariants). |
 | `npm run lint` | ESLint. |
 
 ## How it's built

@@ -71,11 +71,15 @@ correlate a run, never enough to reconstruct the content.
 ## Committed real-engine capture
 
 `real-run.qvac.jsonl` in this folder is a **genuine** capture from the real QVAC
-engine (every line `"engine":"qvac"`), recorded on a CPU-only Linux container
-with software Vulkan (`llvmpipe`). It shows a full remember → recall flow:
-`model_download` → `model_load` → `embed` → `skill` → `model_unload` for
-`GTE_LARGE_FP16`, with the note recalled at **91 %** cosine similarity. It
-contains **no** user content — only content-free fingerprints, timing, and model
-metadata — and demonstrates that the on-device path runs for real, not just the
-mock. (See [../HARDWARE.md](../HARDWARE.md) for the measured numbers, including
-the `LLAMA_3_2_1B_INST_Q4_0` chat run at ttft 1625 ms / 11.5 tok/s.)
+engine (every line `"engine":"qvac"`), recorded by `npm run demo` on a CPU-only
+Linux container with software Vulkan (`llvmpipe`). It is the full 8-step
+walkthrough and exercises **vision, OCR, and embeddings** on real models —
+`model_download` → `model_load` → (`completion` | `ocr` | `embed`) → `skill` →
+`model_unload` — including a verified `$20` currency read, medication-dose
+extraction, a remember→recall RAG pair, and prompt-injection text that is read
+but never obeyed. It contains **no** user content — only content-free
+fingerprints (e.g. `"input":{"chars":77,"sha256_8":"2e0559e8"}`), timing, and
+model metadata — proving the on-device path runs for real, not just the mock.
+Regenerate your own with `npm run demo` on the real engine. (See
+[../HARDWARE.md](../HARDWARE.md) for the measured per-capability numbers,
+including the `LLAMA_3_2_1B_INST_Q4_0` chat run and the TTS/STT voice round-trip.)

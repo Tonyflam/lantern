@@ -21,22 +21,29 @@ const currency = JSON.parse(
 
 /**
  * Deterministically detect a banknote from OCR text: a known denomination plus
- * a currency marker (symbol, ISO code, or name).
+ * a currency marker (symbol, ISO code, name, or a distinctive printed phrase
+ * such as "FEDERAL RESERVE NOTE"). Robust to OCR noise — real recognisers often
+ * mangle the ISO code, so we also accept the spelled-out value ("TWENTY").
  * @param {string} ocrText
  */
 function detectCurrency(ocrText) {
   const text = String(ocrText || "");
+  const upper = text.toUpperCase();
+  const numberWords = currency.denominationWords || {};
   for (const [code, info] of Object.entries(currency.currencies)) {
-    const firstWord = info.name.split(" ")[0];
+    const markers = info.markers || [];
     const hasMarker =
       text.includes(info.symbol) ||
-      new RegExp(`\\b${code}\\b`).test(text) ||
-      new RegExp(firstWord, "i").test(text);
+      new RegExp(`\\b${code}\\b`).test(upper) ||
+      new RegExp(`\\b${info.name.split(" ")[0]}\\b`, "i").test(text) ||
+      markers.some((m) => upper.includes(String(m).toUpperCase()));
     if (!hasMarker) continue;
     // Prefer the largest matching denomination (notes print their value prominently).
     const denoms = [...info.denominations].sort((a, b) => b - a);
     for (const denom of denoms) {
-      if (new RegExp(`\\b${denom}\\b`).test(text)) {
+      const numeric = new RegExp(`\\b${denom}\\b`).test(text);
+      const words = (numberWords[String(denom)] || []).some((w) => new RegExp(`\\b${w}\\b`, "i").test(text));
+      if (numeric || words) {
         return { code, denom, info, note: info.notes[String(denom)] || null };
       }
     }

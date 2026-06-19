@@ -25,6 +25,21 @@ describe("identify — deterministic-first", () => {
     }
   });
 
+  it("still verifies US currency when OCR mangles the ISO code (real-world noise)", async () => {
+    // Real OCR misread "USD" as "asn"; detection must fall back to the printed
+    // phrase "FEDERAL RESERVE NOTE" / "TWENTY DOLLARS".
+    const { imagePath, cleanup } = imageWithText("FEDERAL RESERVE NOTE\nTHE UNITED STATES OF AMERICA\nTWENTY DOLLARS\nasn\n20");
+    try {
+      const r = await identify(ctx(), { imagePath });
+      expect(r.data.kind).toBe("currency");
+      expect(r.data.code).toBe("USD");
+      expect(r.data.denomination).toBe(20);
+      expect(r.verified).toBe(true);
+    } finally {
+      cleanup();
+    }
+  });
+
   it("reads a medication label, extracts dose, and always adds the disclaimer", async () => {
     const { imagePath, cleanup } = imageWithText("Ibuprofen 200 mg tablets. Take two tablets every 6 hours with food.");
     try {

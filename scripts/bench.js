@@ -10,8 +10,6 @@
  *   npm run bench
  *   LANTERN_ENGINE=mock npm run bench   # plumbing only
  */
-import { mkdtempSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { loadConfig } from "../src/config.js";
 import { AuditLogger } from "../src/logger.js";
@@ -23,10 +21,9 @@ const logger = new AuditLogger({ dir: cfg.logging.dir, console: false, root: cfg
 const engine = createEngine(cfg, logger);
 await engine.init();
 
-const dir = mkdtempSync(join(tmpdir(), "lantern-bench-"));
-const img = join(dir, "card.jpg");
-writeFileSync(img, "fixture");
-writeFileSync(img + ".txt", "Hello world. This is a benchmark card with some printed text on it.");
+// Use the committed sample medication label: the mock engine reads its sidecar
+// .txt, the real engine OCRs the actual PNG.
+const img = join(cfg.__root, "src", "data", "samples", "sample-med.png");
 
 console.log(`\n=== Lantern bench (${cfg.engine} engine, device=${cfg.device}, ${ITER} iters) ===`);
 if (cfg.engine === "mock") console.log("  NOTE: mock engine — these numbers measure plumbing only, not real inference.\n");

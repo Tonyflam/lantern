@@ -63,18 +63,28 @@ the hardware evidence for the submission.
 These are **real** QVAC measurements captured during development on a constrained
 2-core Linux container with **no GPU** (software Vulkan / `llvmpipe`). They prove
 the real-engine path works end-to-end and set a worst-case floor; your laptop or
-Hub will be substantially faster. A captured log of this run is committed at
-[evidence/real-run.qvac.jsonl](evidence/real-run.qvac.jsonl) (every line
-`"engine":"qvac"`).
+Hub will be substantially faster. A captured log of the demo walkthrough is
+committed at [evidence/real-run.qvac.jsonl](evidence/real-run.qvac.jsonl) (every
+line `"engine":"qvac"`).
 
-| Capability | Model | Cold load | Warm op | Throughput |
-| ---------- | ----- | --------- | ------- | ---------- |
-| Embeddings | `GTE_LARGE_FP16` (1024-d) | ~7.5 s | ~185–254 ms / embed | — |
-| LLM chat   | `LLAMA_3_2_1B_INST_Q4_0`  | ~48 s | ttft 1625 ms | 11.5 tok/s |
+| Capability | Model | Cold load | Per-op | Throughput |
+| ---------- | ----- | --------- | ------ | ---------- |
+| Embeddings | `GTE_LARGE_FP16` (1024-d) | ~7.5 s | ~185–265 ms / embed | — |
+| LLM chat   | `LLAMA_3_2_1B_INST_Q4_0`  | ~48 s | ttft ~1.6 s | 11.5 tok/s |
+| Vision     | `SMOLVLM2_500M…Q8_0` (+ mmproj) | ~3 s (cached) | ttft ~7.3 s, decode ~0.95 s | 22–23 tok/s |
+| OCR        | `OCR_LATIN_RECOGNIZER_1`  | ~1–7 s | ~5.7–6.2 s / image | 5–7 blocks |
+| TTS        | `TTS_EN_SUPERTONIC_Q8_0`  | ~13 s | ~1.95 s for 4.0 s audio | 44.1 kHz PCM |
+| Translate  | `BERGAMOT_EN_ES`          | <1 s (cached) | ~0.42 s / sentence | — |
+| STT        | `WHISPER_TINY`            | — | ~23 s / clip (CPU, tiny) | — |
+
+> Verified behaviours on this run: remember→recall RAG matched at **91–93 %**
+> cosine; a `$20` note read as **verified** currency from OCR text (robust to the
+> recogniser mangling "USD"); medication dose/frequency extracted
+> deterministically; a TTS→STT voice round-trip returned *"The front door code is
+> 1975."*; and prompt-injection text was read aloud but **never obeyed**.
 
 > Cold load includes the one-time model download into `~/.qvac/models`; warm runs
-> load from cache. Real RAG was verified: a stored note recalled at **91–93 %**
-> cosine similarity via genuine on-device embeddings.
+> load from cache.
 
 > **Prerequisite reminder (Linux/Windows):** the QVAC native worker needs the
 > Vulkan loader (`libvulkan.so.1`) present even on CPU. `npm run doctor` checks
