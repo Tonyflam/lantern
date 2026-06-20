@@ -86,6 +86,10 @@ describe("identify — currency detection across currencies", () => {
     { label: "EUR via name + numeral", ocr: "EURO\n20", code: "EUR", denom: 20 },
     { label: "GBP via Bank of England marker", ocr: "BANK OF ENGLAND\n10\nTEN POUNDS", code: "GBP", denom: 10 },
     { label: "GBP via name + word", ocr: "POUND STERLING\nFIFTY", code: "GBP", denom: 50 },
+    // Ghana cedi (GHS) — real notes print "BANK OF GHANA" + "<N> GHANA CEDIS".
+    { label: "GHS via Bank of Ghana marker + numeral", ocr: "BANK OF GHANA\n10\nTEN GHANA CEDIS", code: "GHS", denom: 10 },
+    { label: "GHS via name word + numeral", ocr: "BANK OF GHANA\nTWO HUNDRED GHANA CEDIS\n200", code: "GHS", denom: 200 },
+    { label: "GHS via CEDIS marker + word (mangled numeral)", ocr: "BANK OF GHANA\nFIFTY GHANA CEDIS", code: "GHS", denom: 50 },
   ];
 
   for (const { label, ocr, code, denom } of cases) {

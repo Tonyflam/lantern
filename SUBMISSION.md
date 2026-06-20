@@ -62,8 +62,8 @@ Record at 1080p, narrate clearly, keep under 5:00.
 ## 4. Pre-submit checklist
 
 - [ ] `npm install` succeeds on a clean clone.
-- [ ] `npm run check` → **lint clean + 42/42 offline checks + 163 tests passing** (one command).
-- [ ] `npm test` → **163 passing**.
+- [ ] `npm run check` → **lint clean + 42/42 offline checks + 166 tests passing** (one command).
+- [ ] `npm test` → **166 passing**.
 - [ ] `npm run verify:offline` → **42/42 offline checks passed**.
 - [ ] `npm run lint` → clean.
 - [ ] `npm audit` → **0 vulnerabilities**.
@@ -90,5 +90,5 @@ Include: the **repo URL**, the **video link**, a short write-up (reuse the READM
 | Technical depth | Full QVAC stack + deterministic spine + P2P delegation + RAG. |
 | Real-world impact | A daily-use assistant for blind & low-vision people. |
 | Trust / honesty | Verified vs AI-estimate badges; content-free auditable logs; injection resistance; clearly-labelled mock. |
-| Reproducibility | No build step; `npm install && npm start`; `npm run check` = lint + 42 offline checks + 163 green tests; 0 vulns. |
+| Reproducibility | No build step; `npm install && npm start`; `npm run check` = lint + 42 offline checks + 166 green tests; 0 vulns. |
 | Privacy | The most sensitive camera use made fully private by construction. |

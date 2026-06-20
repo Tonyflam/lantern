@@ -22,7 +22,7 @@ device** unless you explicitly delegate to a second machine *you* own.
 
 ```bash
 npm install
-npm run check     # ESLint + 42 no-egress checks + 163 tests, one command
+npm run check     # ESLint + 42 no-egress checks + 166 tests, one command
 npm run demo      # LANTERN_ENGINE=mock works on ANY machine, no model download
 ```
 
@@ -171,7 +171,7 @@ LANTERN_PROVIDER_PUBLIC_KEY=<the hub's public key>
 | `npm run demo` | Scripted walkthrough; writes a **real** audit log. |
 | `npm run doctor` | Environment & readiness report. |
 | `npm run bench` | Real TTFT / tokens-per-second on your hardware. |
-| `npm test` | Vitest suite (163 tests; deterministic spine + injection invariants). |
+| `npm test` | Vitest suite (166 tests; deterministic spine + injection invariants). |
 | `npm run verify:offline` | Static no-egress audit (42 checks; bans cloud-AI SDKs, proves loopback + local P2P fallback). |
 | `npm run check` | Everything: lint + offline audit + tests (the one command judges should run). |
 | `npm run lint` | ESLint. |

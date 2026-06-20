@@ -54,6 +54,22 @@
         "20": { "color": "purple", "figure": "Turner" },
         "50": { "color": "red", "figure": "Turing" }
       }
+    },
+    "GHS": {
+      "name": "Ghana Cedi",
+      "symbol": "₵",
+      "markers": ["BANK OF GHANA", "GHANA CEDIS", "CEDIS", "CEDI", "GH₵", "GH¢"],
+      "denominations": [1, 2, 5, 10, 20, 50, 100, 200],
+      "notes": {
+        "1": { "color": "red", "figure": "The Big Six" },
+        "2": { "color": "beige", "figure": "Kwame Nkrumah" },
+        "5": { "color": "blue", "figure": "The Big Six" },
+        "10": { "color": "yellow-green", "figure": "The Big Six" },
+        "20": { "color": "purple", "figure": "The Big Six" },
+        "50": { "color": "brown", "figure": "The Big Six" },
+        "100": { "color": "cyan", "figure": "The Big Six" },
+        "200": { "color": "orange", "figure": "The Big Six" }
+      }
     }
   }
 }
