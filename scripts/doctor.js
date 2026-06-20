@@ -132,7 +132,38 @@ function checkVulkan() {
     return;
   }
 
-  // Is the loader library on the system?
+  if (process.platform === "win32") {
+    const sysRoot = process.env.SystemRoot || "C:\\Windows";
+    const loader = join(sysRoot, "System32", "vulkan-1.dll");
+    if (existsSync(loader)) {
+      // Loader present — try to confirm a usable device (hardware or software).
+      try {
+        const info = execFileSync("vulkaninfo", ["--summary"], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+        const m = info.match(/deviceName\s*=\s*(.+)/);
+        const dev = m ? m[1].trim() : "device detected";
+        const software = /llvmpipe|lavapipe|SwiftShader/i.test(info);
+        line(PASS, "Vulkan loader", `vulkan-1.dll present — ${dev}${software ? " (software fallback, slower)" : ""}`);
+      } catch {
+        line(
+          PASS,
+          "Vulkan loader",
+          "vulkan-1.dll present. If a real run aborts with an RPC timeout, update your GPU driver " +
+            "(Intel/AMD/NVIDIA — integrated GPUs count) so a Vulkan device is available.",
+        );
+      }
+      return;
+    }
+    line(
+      FAIL,
+      "Vulkan loader",
+      "vulkan-1.dll missing — QVAC's native worker needs it even on CPU. " +
+        "Install or update your GPU driver (Intel/AMD/NVIDIA — integrated GPUs count), or install the " +
+        "LunarG Vulkan Runtime. With no Vulkan-capable GPU at all, add Mesa lavapipe (software fallback).",
+    );
+    return;
+  }
+
+  // Linux: is the loader library on the system?
   let loaderFound = false;
   try {
     const out = execFileSync("ldconfig", ["-p"], { encoding: "utf8" });

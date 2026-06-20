@@ -97,11 +97,16 @@ on-device AI more than any other.
 > (microphone in / speaker out).
 >
 > **Linux/Windows real-engine prerequisite — the Vulkan loader.** QVAC's native
-> worker links llama.cpp's Vulkan backend and needs `libvulkan.so.1` present
+> worker links llama.cpp's Vulkan backend and needs the Vulkan **loader** present
 > **even when running on CPU**; without it the worker aborts with a cryptic RPC
-> timeout. On Debian/Ubuntu: `sudo apt-get install -y libvulkan1`. With no GPU,
-> add `mesa-vulkan-drivers` for a software fallback (`llvmpipe`). macOS uses
-> Metal and needs nothing extra. `npm run doctor` checks this for you.
+> timeout (`RPC Initialization times out after 30000 ms`).
+> • **Linux** (`libvulkan.so.1`): `sudo apt-get install -y libvulkan1`; with no
+> GPU, add `mesa-vulkan-drivers` for a software fallback (`llvmpipe`/`lavapipe`).
+> • **Windows** (`vulkan-1.dll`): install or update your GPU driver from Intel,
+> AMD, or NVIDIA — **integrated GPUs count and run Vulkan fine**; alternatively
+> install the LunarG Vulkan Runtime. With no Vulkan-capable GPU at all, add Mesa
+> `lavapipe` (software).
+> • **macOS** uses Metal and needs nothing extra. `npm run doctor` checks this.
 
 ```bash
 npm install
