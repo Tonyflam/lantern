@@ -31,6 +31,8 @@ let micStream = null;
 let recorder = null;
 let chunks = [];
 let busy = false;
+/** @type {AudioContext | null} Unlocked on first user gesture so replies can autoplay on mobile. */
+let audioCtx = null;
 
 init();
 
@@ -38,6 +40,27 @@ async function init() {
   await loadHealth();
   connectEvents();
   wireControls();
+  wireAudioUnlock();
+}
+
+// Mobile browsers (and desktop) block programmatic audio that isn't tied to a
+// user gesture. Creating/resuming an AudioContext on the first tap or keypress
+// "unlocks" audio for the whole session, so spoken replies play even though
+// they arrive after an async fetch.
+function wireAudioUnlock() {
+  const unlock = () => {
+    try {
+      const AC = window.AudioContext || /** @type {any} */ (window).webkitAudioContext;
+      if (!audioCtx && AC) audioCtx = new AC();
+      if (audioCtx && audioCtx.state === "suspended") audioCtx.resume().catch(() => {});
+    } catch {
+      /* WebAudio unavailable — the <audio> fallback still works */
+    }
+  };
+  // Capture-phase, kept active: resume() is idempotent, so re-running per gesture
+  // just guarantees the context is live whenever the user interacts.
+  document.addEventListener("pointerdown", unlock, true);
+  document.addEventListener("keydown", unlock, true);
 }
 
 async function loadHealth() {
@@ -262,12 +285,48 @@ function renderResult(data) {
   }
 
   if (data.audioBase64) {
-    els.player.src = "data:audio/wav;base64," + data.audioBase64;
-    els.player.hidden = false;
-    els.player.play().catch(() => {
-      /* autoplay may be blocked until a user gesture */
-    });
+    playReply(data.audioBase64);
   }
+}
+
+// Play a spoken reply robustly. Prefers a gesture-unlocked WebAudio context
+// (most reliable autoplay on phones); falls back to the <audio> element, and if
+// even that is blocked, reveals tappable controls so the user can play it.
+async function playReply(base64Wav) {
+  // Always populate the <audio> element: a visible replay control and a clear
+  // signal that a spoken reply is ready.
+  els.player.src = "data:audio/wav;base64," + base64Wav;
+  els.player.hidden = false;
+  els.player.controls = true;
+
+  if (audioCtx && audioCtx.state === "running") {
+    try {
+      const bytes = base64ToBytes(base64Wav);
+      const buf = await audioCtx.decodeAudioData(bytes.buffer.slice(0));
+      const node = audioCtx.createBufferSource();
+      node.buffer = buf;
+      node.connect(audioCtx.destination);
+      node.start(0);
+      return;
+    } catch {
+      /* fall through to the <audio> element */
+    }
+  }
+
+  try {
+    await els.player.play();
+  } catch {
+    // Autoplay blocked and no unlocked context — the visible controls let the
+    // user tap ▶ to hear the reply.
+    setStatus("Tap \u25B6 to hear the reply");
+  }
+}
+
+function base64ToBytes(b64) {
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes;
 }
 
 function badge(text, kind) {
