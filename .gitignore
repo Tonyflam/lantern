@@ -31,3 +31,7 @@ coverage/
 *.log
 tmp/
 .DS_Store
+
+# Private submission notes — never pushed to GitHub
+BUIDL.md
+SUBMISSION.md
